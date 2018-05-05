@@ -1,7 +1,7 @@
 
 # Data Area.  Note that while this is typically only
 # For global immutable data, for SPIM, this also includes
-# mutable data.        
+# mutable data.
 .data
 incorrect:
         .asciiz "---TEST FAILED---\n"
@@ -13,10 +13,10 @@ comma:
         .asciiz ", "
 newline:
         .asciiz "\n"
-        
+
 expectedMyArray:
         .word 29 28 27 26 25 24 23 22 21
-        
+
 myArray:
         .word 21 22 23 24 25 26 27 28 29
 
@@ -31,7 +31,7 @@ printArray:
         li $v0, 4
         la $a0, comma
         syscall
-        
+
         li $v0, 1
         lw $a0, 4($t0)
         syscall
@@ -89,24 +89,24 @@ printArray:
         syscall
 
         jr $ra
-        
+
 # unsigned int* p1 = expectedMyArray
 # unsigned int* p2 = myArray
 # unsigned int* limit = expectedMyArray + 9
 #
 # while (p1 < limit) {
 #   if (*p1 != *p2) {
-#     return 0                  
+#     return 0
 #   }
-#   p1++                        
+#   p1++
 #   p2++
 # }
-# return 1                      
+# return 1
 checkArrays:
         # $t0: p1
         # $t1: p2
         # $t2: limit
-        
+
         la $t0, expectedMyArray
         la $t1, myArray
         addiu $t2, $t0, 36
@@ -121,16 +121,16 @@ checkArrays_loop:
         addiu $t0, $t0, 4
         addiu $t1, $t1, 4
         j checkArrays_loop
-        
+
 checkArrays_nonequal:
         li $v0, 0
         jr $ra
-        
+
 checkArrays_exit:
         li $v0, 1
         jr $ra
-        
-main:   
+
+main:
         la $a0, before
         li $v0, 4
         syscall
@@ -142,23 +142,23 @@ main:
         la $a0, after
         li $v0, 4
         syscall
-        
+
         jal printArray
 
         jal checkArrays
         beq $v0, $zero, main_failed
         j main_exit
-        
+
 main_failed:
         la $a0, incorrect
         li $v0, 4
         syscall
-        
-main_exit:      
+
+main_exit:
         li $v0, 10
         syscall
 
-        
+
 # COPYFROMHERE - DO NOT REMOVE THIS LINE
 
 doSwap:
@@ -179,10 +179,44 @@ doSwap:
         #   y--
         # }
 
-
-
         # TODO: fill in the code
 
-        
-        # do not remove this line
-        jr $ra
+        la $t5, myArray
+
+      	li $t0, 0
+
+      	li $t1, 8
+
+      	li $t2, 4
+swap_loop:
+      	beq $t0, 4, checkArrays
+
+      	move $t3, $t0
+      	move $t4, $t1
+
+      	mult $t3, $t2
+      	mflo $t3
+
+      	mult $t4, $t2
+      	mflo $t4
+
+      	add $t5, $t5, $t3
+
+      	lw $t6, ($t5)
+
+      	la $t5, myArray
+
+      	add $t5, $t5, $t4
+
+      	lw $t7, ($t5)
+      	sw $t6, ($t5)
+
+      	la $t5, myArray
+      	add $t5, $t5, $t3
+      	sw $t7, ($t5)
+
+      	la $t5, myArray
+
+      	addi $t0, $t0, 1
+      	sub $t1, $t1, 1
+      	j swap_loop
