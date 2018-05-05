@@ -292,14 +292,14 @@ printvalues:
 
 storevalues:
 
-        # TODO: translate each line into mips
+      # TODO: translate each line into mips
         # use only regs $v0-$v1, $t0-$t7, $a0-$a3
         # you may assume nothing about their starting values
 
-        # globalA = 6
+				# globalA = 6
 				li $t0, 6
 				sw $t0, globalA
-        # globalB = 6
+				# globalB = 6
 				sw $t0, globalB
         # globalC = 30
 				li $t0, 30
@@ -385,7 +385,7 @@ arrays:
         jr $ra
 
 arraycalcs:
-        # TODO: translate each line into mips
+				# TODO: translate each line into mips
         # use only regs $v0-$v1, $t0-$t7, $a0-$a3
         # you may assume nothing about their starting values
 				la $t5, myArray
